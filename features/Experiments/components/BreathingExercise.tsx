@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
-import { Home, Play, Pause } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Play, Pause } from 'lucide-react';
 import clsx from 'clsx';
 import { useClick } from '@/shared/hooks/useAudio';
 import { getRandomKana } from '../data/kanaData';
@@ -29,7 +28,6 @@ const BreathingExercise = () => {
   const [currentKana, setCurrentKana] = useState(getRandomKana());
   const [cycleCount, setCycleCount] = useState(0);
   const { playClick } = useClick();
-  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -60,11 +58,6 @@ const BreathingExercise = () => {
     return () => clearTimeout(timer);
   }, [phase, isPlaying]);
 
-  const handleClose = () => {
-    playClick();
-    router.push('/');
-  };
-
   const togglePlay = () => {
     playClick();
     setIsPlaying(!isPlaying);
@@ -74,10 +67,9 @@ const BreathingExercise = () => {
 
   const scale =
     phase === 'inhale' || phase === 'hold' ? 'scale-100' : 'scale-75';
-  const duration = `duration-[${PHASE_DURATIONS[phase]}ms]`;
 
   return (
-    <div className='relative min-h-[100dvh] max-w-[100dvw] overflow-hidden bg-[var(--background-color)] flex items-center justify-center'>
+    <div className='flex flex-col items-center justify-center gap-8 flex-1 min-h-[80vh]'>
       {/* Breathing circle */}
       <div className='relative flex flex-col items-center gap-8'>
         <div
@@ -130,21 +122,6 @@ const BreathingExercise = () => {
           {isPlaying ? <Pause size={24} /> : <Play size={24} />}
         </button>
       </div>
-
-      {/* Home button */}
-      <button
-        onClick={handleClose}
-        className={clsx(
-          'fixed top-4 right-4 z-50 p-2 rounded-lg',
-          'bg-[var(--card-color)] border border-[var(--border-color)]',
-          'text-[var(--secondary-color)] hover:text-[var(--main-color)]',
-          'hover:cursor-pointer transition-all duration-250',
-          'active:scale-95'
-        )}
-        aria-label='Return to home'
-      >
-        <Home size={24} />
-      </button>
     </div>
   );
 };

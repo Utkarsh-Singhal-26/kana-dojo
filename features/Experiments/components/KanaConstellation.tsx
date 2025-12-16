@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { Home, RotateCcw, Star } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+import { RotateCcw, Star } from 'lucide-react';
 import clsx from 'clsx';
 import { useClick, useCorrect, useError } from '@/shared/hooks/useAudio';
 import { hiraganaOnly } from '../data/kanaData';
@@ -44,11 +43,9 @@ const KanaConstellation = () => {
   >([]);
   const [isComplete, setIsComplete] = useState(false);
   const [score, setScore] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const { playClick } = useClick();
   const { playCorrect } = useCorrect();
   const { playError } = useError();
-  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -105,17 +102,12 @@ const KanaConstellation = () => {
     setIsComplete(false);
   }, [playClick]);
 
-  const handleClose = () => {
-    playClick();
-    router.push('/');
-  };
-
   if (!isMounted) return null;
 
   const currentTarget = points.find(p => p.order === currentIndex);
 
   return (
-    <div className='relative min-h-[100dvh] max-w-[100dvw] overflow-hidden bg-[var(--background-color)] flex flex-col items-center justify-center p-4'>
+    <div className='flex flex-col items-center justify-center gap-4 flex-1 min-h-[80vh]'>
       {/* Header */}
       <div className='text-center mb-4'>
         <h1 className='text-2xl md:text-3xl text-[var(--main-color)] flex items-center gap-2 justify-center'>
@@ -132,7 +124,6 @@ const KanaConstellation = () => {
 
       {/* Constellation area */}
       <div
-        ref={containerRef}
         className={clsx(
           'relative w-full max-w-2xl aspect-[4/3]',
           'bg-[var(--card-color)] border border-[var(--border-color)]',
@@ -223,21 +214,6 @@ const KanaConstellation = () => {
           Reset
         </button>
       )}
-
-      {/* Home button */}
-      <button
-        onClick={handleClose}
-        className={clsx(
-          'fixed top-4 right-4 z-50 p-2 rounded-lg',
-          'bg-[var(--card-color)] border border-[var(--border-color)]',
-          'text-[var(--secondary-color)] hover:text-[var(--main-color)]',
-          'hover:cursor-pointer transition-all duration-250',
-          'active:scale-95'
-        )}
-        aria-label='Return to home'
-      >
-        <Home size={24} />
-      </button>
     </div>
   );
 };

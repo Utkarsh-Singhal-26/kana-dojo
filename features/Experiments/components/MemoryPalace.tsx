@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
-import { Home, RotateCcw, Eye, EyeOff, Play } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { EyeOff, Play } from 'lucide-react';
 import clsx from 'clsx';
 import { useClick, useCorrect, useError } from '@/shared/hooks/useAudio';
 import { hiraganaOnly } from '../data/kanaData';
@@ -17,8 +16,8 @@ interface MemoryCard {
   isMatched: boolean;
 }
 
-const GRID_SIZE = 8; // 4x2 grid
-const MEMORIZE_TIME = 5000; // 5 seconds to memorize
+const GRID_SIZE = 8;
+const MEMORIZE_TIME = 5000;
 
 const MemoryPalace = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,13 +31,10 @@ const MemoryPalace = () => {
   const { playClick } = useClick();
   const { playCorrect } = useCorrect();
   const { playError } = useError();
-  const router = useRouter();
 
   const generateCards = useCallback(() => {
     const shuffled = [...hiraganaOnly].sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, GRID_SIZE / 2);
-
-    // Create pairs
     const pairs: MemoryCard[] = [];
     selected.forEach((k, i) => {
       pairs.push({
@@ -58,20 +54,16 @@ const MemoryPalace = () => {
         isMatched: false
       });
     });
-
-    // Shuffle positions
     const shuffledPairs = pairs.sort(() => Math.random() - 0.5);
     shuffledPairs.forEach((card, i) => {
       card.position = i;
     });
-
     return shuffledPairs;
   }, []);
 
   const startGame = useCallback(() => {
     playClick();
-    const newCards = generateCards();
-    setCards(newCards);
+    setCards(generateCards());
     setPhase('memorize');
     setSelectedCard(null);
     setMistakes(0);
@@ -83,10 +75,8 @@ const MemoryPalace = () => {
     startGame();
   }, []);
 
-  // Memorize timer
   useEffect(() => {
     if (phase !== 'memorize') return;
-
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -97,30 +87,23 @@ const MemoryPalace = () => {
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, [phase]);
 
   const handleCardClick = useCallback(
     (card: MemoryCard) => {
       if (phase !== 'recall' || card.isMatched || card.isRevealed) return;
-
       playClick();
-
       if (!selectedCard) {
-        // First card selection
         setSelectedCard(card);
         setCards(c =>
           c.map(c => (c.id === card.id ? { ...c, isRevealed: true } : c))
         );
       } else {
-        // Second card selection
         setCards(c =>
           c.map(c => (c.id === card.id ? { ...c, isRevealed: true } : c))
         );
-
         if (selectedCard.kana === card.kana && selectedCard.id !== card.id) {
-          // Match!
           playCorrect();
           setScore(s => s + 1);
           setCards(c =>
@@ -131,19 +114,13 @@ const MemoryPalace = () => {
             )
           );
           setSelectedCard(null);
-
-          // Check if all matched
           setTimeout(() => {
             setCards(current => {
-              const allMatched = current.every(c => c.isMatched);
-              if (allMatched) {
-                setPhase('result');
-              }
+              if (current.every(c => c.isMatched)) setPhase('result');
               return current;
             });
           }, 300);
         } else {
-          // No match
           playError();
           setMistakes(m => m + 1);
           setTimeout(() => {
@@ -163,17 +140,11 @@ const MemoryPalace = () => {
     startGame();
   }, [startGame]);
 
-  const handleClose = () => {
-    playClick();
-    router.push('/');
-  };
-
   if (!isMounted) return null;
 
   return (
-    <div className='relative min-h-[100dvh] max-w-[100dvw] overflow-hidden bg-[var(--background-color)] flex flex-col items-center justify-center p-4'>
-      {/* Header */}
-      <div className='text-center mb-6'>
+    <div className='flex flex-col items-center justify-center gap-6 flex-1 min-h-[80vh]'>
+      <div className='text-center mb-2'>
         <h1 className='text-2xl md:text-3xl text-[var(--main-color)]'>
           Memory Palace
         </h1>
@@ -194,8 +165,6 @@ const MemoryPalace = () => {
           </span>
         </div>
       </div>
-
-      {/* Card grid */}
       <div className='grid grid-cols-4 gap-3 md:gap-4 max-w-md'>
         {cards
           .sort((a, b) => a.position - b.position)
@@ -205,10 +174,7 @@ const MemoryPalace = () => {
               onClick={() => handleCardClick(card)}
               disabled={phase === 'memorize' || card.isMatched}
               className={clsx(
-                'w-16 h-20 md:w-20 md:h-24 rounded-xl',
-                'flex flex-col items-center justify-center',
-                'transition-all duration-300 transform',
-                'hover:cursor-pointer',
+                'w-16 h-20 md:w-20 md:h-24 rounded-xl flex flex-col items-center justify-center transition-all duration-300 transform hover:cursor-pointer',
                 card.isMatched && 'opacity-50 scale-95',
                 card.isRevealed || card.isMatched
                   ? 'bg-[var(--card-color)] border-2 border-[var(--main-color)]'
@@ -233,10 +199,8 @@ const MemoryPalace = () => {
             </button>
           ))}
       </div>
-
-      {/* Result overlay */}
       {phase === 'result' && (
-        <div className='mt-6 text-center'>
+        <div className='mt-2 text-center'>
           <p className='text-xl text-[var(--main-color)] mb-4'>
             {mistakes === 0
               ? '🎉 Perfect!'
@@ -247,11 +211,7 @@ const MemoryPalace = () => {
           <button
             onClick={nextRound}
             className={clsx(
-              'px-6 py-3 rounded-xl flex items-center gap-2 mx-auto',
-              'bg-[var(--card-color)] border border-[var(--border-color)]',
-              'text-[var(--main-color)]',
-              'hover:cursor-pointer hover:border-[var(--main-color)]',
-              'transition-all duration-250 active:scale-95'
+              'px-6 py-3 rounded-xl flex items-center gap-2 mx-auto bg-[var(--card-color)] border border-[var(--border-color)] text-[var(--main-color)] hover:cursor-pointer hover:border-[var(--main-color)] transition-all duration-250 active:scale-95'
             )}
           >
             <Play size={20} />
@@ -259,21 +219,6 @@ const MemoryPalace = () => {
           </button>
         </div>
       )}
-
-      {/* Home button */}
-      <button
-        onClick={handleClose}
-        className={clsx(
-          'fixed top-4 right-4 z-50 p-2 rounded-lg',
-          'bg-[var(--card-color)] border border-[var(--border-color)]',
-          'text-[var(--secondary-color)] hover:text-[var(--main-color)]',
-          'hover:cursor-pointer transition-all duration-250',
-          'active:scale-95'
-        )}
-        aria-label='Return to home'
-      >
-        <Home size={24} />
-      </button>
     </div>
   );
 };

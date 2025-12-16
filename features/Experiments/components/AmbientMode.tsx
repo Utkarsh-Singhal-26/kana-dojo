@@ -1,9 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
-import { Home } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
-import { useClick } from '@/shared/hooks/useAudio';
 import { getRandomKana } from '../data/kanaData';
 
 interface FloatingKana {
@@ -22,8 +19,6 @@ const AmbientMode = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [floatingKana, setFloatingKana] = useState<FloatingKana[]>([]);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
-  const { playClick } = useClick();
-  const router = useRouter();
   const idCounter = useRef(0);
 
   useEffect(() => {
@@ -78,15 +73,10 @@ const AmbientMode = () => {
     return () => clearInterval(interval);
   }, [isMounted]);
 
-  const handleClose = () => {
-    playClick();
-    router.push('/');
-  };
-
   if (!isMounted) return null;
 
   return (
-    <div className='relative min-h-[100dvh] max-w-[100dvw] overflow-hidden bg-[var(--background-color)]'>
+    <div className='relative flex-1 min-h-[80vh] overflow-hidden'>
       {/* Floating kana */}
       {floatingKana.map(item => (
         <div
@@ -131,21 +121,6 @@ const AmbientMode = () => {
           }
         }
       `}</style>
-
-      {/* Home button */}
-      <button
-        onClick={handleClose}
-        className={clsx(
-          'fixed top-4 right-4 z-50 p-2 rounded-lg',
-          'bg-[var(--card-color)] border border-[var(--border-color)]',
-          'text-[var(--secondary-color)] hover:text-[var(--main-color)]',
-          'hover:cursor-pointer transition-all duration-250',
-          'active:scale-95'
-        )}
-        aria-label='Return to home'
-      >
-        <Home size={24} />
-      </button>
     </div>
   );
 };

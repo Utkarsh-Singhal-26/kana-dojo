@@ -1,7 +1,6 @@
 'use client';
 import { Link } from '@/core/i18n/routing';
 import {
-  Home,
   Wind,
   CloudRain,
   Sparkles,
@@ -12,7 +11,6 @@ import {
   Brain,
   Leaf
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { useClick } from '@/shared/hooks/useAudio';
 
@@ -84,63 +82,36 @@ const experiments = [
 
 export default function ExperimentsPage() {
   const { playClick } = useClick();
-  const router = useRouter();
 
   return (
-    <div className='min-h-[100dvh] bg-[var(--background-color)] p-4 md:p-8'>
-      <div className='max-w-4xl mx-auto'>
-        {/* Header */}
-        <div className='flex items-center justify-between mb-8'>
-          <div>
-            <h1 className='text-2xl md:text-3xl text-[var(--main-color)]'>
-              Experiments
-            </h1>
-            <p className='text-[var(--secondary-color)] mt-1'>
-              Relaxation and experimental features
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              playClick();
-              router.push('/');
-            }}
+    <div className='flex flex-col gap-4 pt-4 md:pt-8'>
+      <div className='mb-4'>
+        <h1 className='text-2xl md:text-3xl text-[var(--main-color)]'>
+          Experiments
+        </h1>
+        <p className='text-[var(--secondary-color)] mt-1'>
+          Relaxation and experimental features
+        </p>
+      </div>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+        {experiments.map(exp => (
+          <Link
+            key={exp.name}
+            href={exp.href}
+            onClick={() => playClick()}
             className={clsx(
-              'p-2 rounded-lg',
-              'bg-[var(--card-color)] border border-[var(--border-color)]',
-              'text-[var(--secondary-color)] hover:text-[var(--main-color)]',
-              'hover:cursor-pointer transition-all duration-250',
-              'active:scale-95'
+              'p-6 rounded-xl bg-[var(--card-color)] border border-[var(--border-color)] hover:border-[var(--main-color)] transition-all duration-250 flex flex-col gap-3'
             )}
           >
-            <Home size={24} />
-          </button>
-        </div>
-
-        {/* Grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {experiments.map(exp => (
-            <Link
-              key={exp.name}
-              href={exp.href}
-              onClick={() => playClick()}
-              className={clsx(
-                'p-6 rounded-xl',
-                'bg-[var(--card-color)] border border-[var(--border-color)]',
-                'hover:border-[var(--main-color)]',
-                'transition-all duration-250',
-                'flex flex-col gap-3'
-              )}
-            >
-              <exp.icon size={32} className={exp.color} />
-              <div>
-                <h2 className='text-lg text-[var(--main-color)]'>{exp.name}</h2>
-                <p className='text-sm text-[var(--secondary-color)]'>
-                  {exp.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+            <exp.icon size={32} className={exp.color} />
+            <div>
+              <h2 className='text-lg text-[var(--main-color)]'>{exp.name}</h2>
+              <p className='text-sm text-[var(--secondary-color)]'>
+                {exp.description}
+              </p>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );
