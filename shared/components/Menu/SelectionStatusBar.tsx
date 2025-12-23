@@ -12,6 +12,7 @@ import { CircleCheck, Trash } from 'lucide-react';
 import { ActionButton } from '@/shared/components/ui/ActionButton';
 import { AnimatePresence, motion } from 'framer-motion';
 import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
+import { cn } from '@/shared/lib/utils';
 
 type ContentType = 'kana' | 'kanji' | 'vocabulary';
 
@@ -355,7 +356,7 @@ const SelectionStatusBar = () => {
               onClick={handleClear}
               aria-label='Clear selected levels'
             >
-              <Trash size={20} />
+              <Trash size={20} className={cn('fill-current')} />
             </ActionButton>
           </div>
         </motion.div>

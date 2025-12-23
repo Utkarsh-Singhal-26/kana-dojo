@@ -1,13 +1,6 @@
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
-import {
-  X,
-  CircleCheck,
-  Circle,
-  CheckCheck,
-  Trash2,
-  Dices
-} from 'lucide-react';
+import { X, CircleCheck, Circle, Check, Trash2, Dices } from 'lucide-react';
 import { useClick } from '@/shared/hooks/useAudio';
 import { ActionButton } from '@/shared/components/ui/ActionButton';
 
@@ -60,7 +53,7 @@ const QuickSelectModal = ({
 
   return (
     <div
-      className='fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50'
+      className='fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4'
       onClick={e => {
         if (e.target === e.currentTarget) {
           playClick();
@@ -68,13 +61,13 @@ const QuickSelectModal = ({
         }
       }}
     >
-      <div className='bg-[var(--background-color)] rounded-2xl border-2 border-[var(--border-color)] max-w-4xl w-full max-h-[85vh] sm:max-h-[80vh] overflow-hidden flex flex-col'>
-        <div className='flex items-center justify-between p-4 sm:p-6 border-b-2 border-[var(--border-color)] flex-shrink-0'>
+      <div className='flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border-2 border-[var(--border-color)] bg-[var(--background-color)] sm:max-h-[80vh]'>
+        <div className='flex flex-shrink-0 items-center justify-between border-b-2 border-[var(--border-color)] p-4 sm:p-6'>
           <div>
-            <h2 className='text-xl sm:text-2xl font-bold text-[var(--main-color)]'>
+            <h2 className='text-xl font-bold text-[var(--main-color)] sm:text-2xl'>
               Quick Select - {unitName.toUpperCase()}
             </h2>
-            <p className='text-xs sm:text-sm text-[var(--secondary-color)] mt-1'>
+            <p className='mt-1 text-xs text-[var(--secondary-color)] sm:text-sm'>
               {selectedSets.length} of {sets.length} levels selected
             </p>
           </div>
@@ -83,19 +76,19 @@ const QuickSelectModal = ({
               playClick();
               onClose();
             }}
-            className='p-2 rounded-xl hover:bg-[var(--card-color)] transition-colors flex-shrink-0 hover:cursor-pointer'
+            className='flex-shrink-0 rounded-xl p-2 transition-colors hover:cursor-pointer hover:bg-[var(--card-color)]'
           >
-            <X size={24} className='text-[var(--secondary-color)] ' />
+            <X size={24} className='text-[var(--secondary-color)]' />
           </button>
         </div>
 
-        <div className='flex flex-wrap gap-2 sm:gap-3 p-3 sm:p-4 border-b-2 border-[var(--border-color)] flex-shrink-0'>
+        <div className='flex flex-shrink-0 flex-wrap gap-2 border-b-2 border-[var(--border-color)] p-3 sm:gap-3 sm:p-4'>
           {[
             {
               label: 'Select All',
               onClick: onSelectAll,
               disabled: false,
-              icon: CheckCheck,
+              icon: CircleCheck,
               iconOnly: false,
               colorScheme: 'main' as const,
               borderColorScheme: 'main' as const,
@@ -147,11 +140,11 @@ const QuickSelectModal = ({
                 disabled={btn.disabled}
                 colorScheme={btn.colorScheme ?? 'secondary'}
                 borderColorScheme={btn.borderColorScheme ?? 'secondary'}
-                borderRadius='2xl'
-                borderBottomThickness={6}
+                borderRadius='3xl'
+                borderBottomThickness={10}
                 className={clsx(
                   'w-auto text-sm disabled:cursor-not-allowed disabled:opacity-50',
-                  btn.iconOnly ? 'px-4 sm:px-6 py-2' : 'px-3 sm:px-4 py-2'
+                  btn.iconOnly ? 'px-4 py-4 sm:px-6' : 'px-3 py-4 sm:px-4'
                 )}
               >
                 <span
@@ -161,7 +154,7 @@ const QuickSelectModal = ({
                   )}
                 >
                   {btn.icon ? (
-                    <btn.icon size={16} className='text-current' />
+                    <btn.icon size={16} className='fill-current text-current' />
                   ) : null}
                   {btn.iconOnly ? (
                     <span className='sr-only'>{btn.label}</span>
@@ -182,26 +175,26 @@ const QuickSelectModal = ({
             }}
             placeholder='search for a level...'
             className={clsx(
-              'px-3 sm:px-4 py-2 text-sm rounded-xl border-2 transition-all',
+              'rounded-xl border-2 px-3 py-2 text-sm transition-all sm:px-4',
               'border-[var(--border-color)] hover:bg-[var(--card-color)]',
               'text-[var(--secondary-color)]',
-              'focus:outline-0 focus:ring focus:ring-offset-2-[var(--secondary-color)]/80'
+              'focus:ring-offset-2-[var(--secondary-color)]/80 focus:ring focus:outline-0'
             )}
           />
         </div>
 
         {/* Grid of Sets */}
-        <div className='overflow-y-auto p-4 sm:p-6 flex-1 min-h-0'>
+        <div className='min-h-0 flex-1 overflow-y-auto p-4 sm:p-6'>
           {filteredSets.length === 0 ? (
-            <div className='flex items-center justify-center h-full'>
-              <p className='text-[var(--secondary-color)] text-sm'>
+            <div className='flex h-full items-center justify-center'>
+              <p className='text-sm text-[var(--secondary-color)]'>
                 No level found. Available levels:{' '}
                 {sets[0]?.name.match(/\d+/)?.[0]} -{' '}
                 {sets[sets.length - 1]?.name.match(/\d+/)?.[0]}
               </p>
             </div>
           ) : (
-            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3'>
+            <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5'>
               {filteredSets.map(set => {
                 const isSelected = selectedSets.includes(set.name);
                 return (
@@ -213,31 +206,31 @@ const QuickSelectModal = ({
                     }}
                     colorScheme={isSelected ? 'main' : undefined}
                     borderColorScheme={isSelected ? 'main' : undefined}
-                    borderRadius='xl'
-                    borderBottomThickness={isSelected ? 6 : 0}
+                    borderRadius='3xl'
+                    borderBottomThickness={isSelected ? 10 : 0}
                     className={clsx(
                       'flex flex-col items-center gap-2 p-3 sm:p-4',
                       isSelected
                         ? 'order-first'
-                        : 'bg-[var(--card-color)] text-[var(--secondary-color)] border-2 border-[var(--border-color)]'
+                        : 'border-2 border-[var(--border-color)] bg-[var(--card-color)] text-[var(--secondary-color)]'
                     )}
                   >
                     {isSelected ? (
                       <CircleCheck
                         size={18}
-                        className='text-[var(--background-color)] flex-shrink-0'
+                        className='flex-shrink-0 text-[var(--background-color)] fill-current'
                       />
                     ) : (
                       <Circle
                         size={18}
-                        className='text-[var(--main-color)] flex-shrink-0'
+                        className='flex-shrink-0 text-[var(--main-color)]'
                       />
                     )}
-                    <span className='text-xs sm:text-sm font-medium text-center'>
+                    <span className='text-center text-xs font-medium sm:text-sm'>
                       {set.name.replace('Set ', 'Level ')}
                     </span>
                     {set.isMastered && (
-                      <span className='text-[10px] sm:text-xs opacity-70'>
+                      <span className='text-[10px] opacity-70 sm:text-xs'>
                         Mastered
                       </span>
                     )}
@@ -248,7 +241,7 @@ const QuickSelectModal = ({
           )}
         </div>
 
-        <div className='p-3 sm:p-4 border-t-2 border-[var(--border-color)] flex justify-end flex-shrink-0'>
+        <div className='flex flex-shrink-0 justify-end border-t-2 border-[var(--border-color)] p-3 sm:p-4'>
           <ActionButton
             onClick={() => {
               playClick();
@@ -256,10 +249,11 @@ const QuickSelectModal = ({
             }}
             colorScheme='main'
             borderColorScheme='main'
-            borderRadius='xl'
-            borderBottomThickness={4}
-            className='w-auto px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium'
+            borderRadius='3xl'
+            borderBottomThickness={10}
+            className='w-auto px-5 py-2.5 text-sm font-medium sm:px-6 sm:py-3 sm:text-base'
           >
+            <CircleCheck size={24} />
             Done
           </ActionButton>
         </div>

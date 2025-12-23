@@ -9,7 +9,8 @@ import {
   Keyboard,
   Play,
   ArrowLeft,
-  CheckCircle2
+  CheckCircle2,
+  Zap
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useClick } from '@/shared/hooks/useAudio';
@@ -17,6 +18,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Link, useRouter } from '@/core/i18n/routing';
 import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
 import { ActionButton } from '@/shared/components/ui/ActionButton';
+import { cn } from '@/shared/lib/utils';
 
 interface GameModesProps {
   isOpen: boolean;
@@ -330,7 +332,12 @@ const GameModes = ({
         <div className='w-full max-w-lg space-y-4'>
           {/* Header */}
           <div className='space-y-3 text-center'>
-            <Play size={56} className='mx-auto text-[var(--main-color)]' />
+            {mode === 'blitz' && (
+              <Zap size={56} className='mx-auto text-[var(--main-color)]' />
+            )}
+            {mode === 'train' && (
+              <Play size={56} className='mx-auto text-[var(--main-color)]' />
+            )}
             <h1 className='text-2xl font-bold text-[var(--main-color)]'>
               {dojoLabel}{' '}
               {mode === 'blitz'
@@ -340,7 +347,9 @@ const GameModes = ({
                   : 'Training'}
             </h1>
             <p className='text-[var(--secondary-color)]'>
-              Practice in a classic, endless way
+              {mode === 'blitz'
+                ? 'Practice in a fast-paced, time-limited way'
+                : 'Practice in a classic, endless way'}
             </p>
           </div>
 
@@ -383,7 +392,14 @@ const GameModes = ({
                         : 'bg-[var(--border-color)] text-[var(--muted-color)]'
                     )}
                   >
-                    <Icon size={24} />
+                    <Icon
+                      size={24}
+                      /* className={cn(
+                        selectedGameMode.toLowerCase() === 'pick'
+                          ? 'fill-current'
+                          : ''
+                      )} */
+                    />
                   </div>
 
                   {/* Content */}

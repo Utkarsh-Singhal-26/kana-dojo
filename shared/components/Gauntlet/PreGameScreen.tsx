@@ -106,7 +106,7 @@ export default function PreGameScreen({
         <div className='w-full max-w-lg space-y-4'>
           {/* Header */}
           <div className='space-y-3 text-center'>
-            <Swords size={56} className='mx-auto text-[var(--main-color)]' />
+            <Swords size={56} className='mx-auto text-[var(--main-color)] ' />
             <h1 className='text-2xl font-bold text-[var(--main-color)]'>
               {dojoLabel} Gauntlet
             </h1>
@@ -197,7 +197,7 @@ export default function PreGameScreen({
                         onClick={() => handleDifficultyClick(key)}
                         className={clsx(
                           'flex flex-col items-center gap-1 rounded-xl p-3',
-                          'border-2 transition-all duration-200',
+                          'transition-all duration-200',
                           'hover:cursor-pointer',
                           isSelected
                             ? 'border-[var(--main-color)] bg-[var(--main-color)]/10'
@@ -206,7 +206,7 @@ export default function PreGameScreen({
                       >
                         <div
                           className={clsx(
-                            'text-lg',
+                            'text-xl fill-current',
                             isSelected
                               ? 'text-[var(--main-color)]'
                               : 'text-[var(--muted-color)]'
