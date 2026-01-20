@@ -1099,6 +1099,12 @@ const baseThemeSets: BaseThemeGroup[] = [
         mainColor: 'oklch(72.0% 0.195 220.0 / 1)',
         secondaryColor: 'oklch(68.0% 0.205 30.0 / 1)',
       },
+      {
+        id: 'umbrella-rain',
+        backgroundColor: 'oklch(22.0% 0.018 250.0 / 1)',
+        mainColor: 'oklch(70.0% 0.175 225.0 / 1)',
+        secondaryColor: 'oklch(75.0% 0.145 350.0 / 1)',
+      },
     ],
   },
   {
