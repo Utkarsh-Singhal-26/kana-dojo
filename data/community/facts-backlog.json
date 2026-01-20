@@ -527,17 +527,23 @@
   {
     "id": 79,
     "fact": "The Japanese word 'nomunication' combines 'nomu' (drink) and 'communication' - bonding with colleagues over after-work drinks.",
-    "issued": false
+    "issued": true,
+    "completed": true,
+    "completedBy": "ManzoorAhmedShaikh",
+    "completedPR": 1159
   },
   {
     "id": 80,
     "fact": "Japan has 'midnight service' buses for people who miss the last train, charging premium prices to get workers home.",
-    "issued": false
+    "issued": true,
+    "completed": true,
+    "completedBy": "Doc-Entity",
+    "completedPR": 1165
   },
   {
     "id": 81,
     "fact": "The concept of 'wa' (和) in Japanese represents harmony - so important that the official name for Japan is 'Wa' (the country of harmony).",
-    "issued": false
+    "issued": true
   },
   {
     "id": 82,
